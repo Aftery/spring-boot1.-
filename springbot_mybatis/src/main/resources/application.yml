@@ -1,59 +1,70 @@
-server:
-  servlet:
-    context-path: /web
+a
+
 spring:
   datasource:
     druid:
-      driver-class-name: com.mysql.jdbc.Driver
-      url: mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+     # type: com.alibaba.druid.pool.DruidDataSource
+      # æ•°æ®åº“è®¿é—®é…ç½®, ä½¿ç”¨druidæ•°æ®æº
+     # driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/springboot?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
       username: root
       password: 12345678
-      #ßB½Ó³ØÅäÖÃ
+      # è¿æ¥æ± é…ç½®
       initial-size: 5
-      min-idle: 20
-      #æœ½ÓµÈ´ı³¬•r
+      min-idle: 5
+      max-active: 20
+      # è¿æ¥ç­‰å¾…è¶…æ—¶æ—¶é—´
       max-wait: 30000
-      #ÅäÖÃ™z²é¿ÉÒÔêPé]µÄ¿Õéeég¸ô•rég
+      # é…ç½®æ£€æµ‹å¯ä»¥å…³é—­çš„ç©ºé—²è¿æ¥é—´éš”æ—¶é—´
       time-between-eviction-runs-millis: 60000
-      #ÅäÖÃßB½Ó³ØÔÚ³ØÖĞµÄ×îĞ¡Éú´æ•rég
-      min-evictable-idle-time-millis: 30000
+      # é…ç½®è¿æ¥åœ¨æ± ä¸­çš„æœ€å°ç”Ÿå­˜æ—¶é—´
+      min-evictable-idle-time-millis: 300000
       validation-query: select '1' from dual
       test-while-idle: true
       test-on-borrow: false
       test-on-return: false
-      #´òé_PSCache£¬²¢ÇÒÖ¸¶¨Ã¿‚€æœ½ÓÉÏPSCacheµÄ´óĞ¡
+      # æ‰“å¼€PSCacheï¼Œå¹¶ä¸”æŒ‡å®šæ¯ä¸ªè¿æ¥ä¸ŠPSCacheçš„å¤§å°
       pool-prepared-statements: true
       max-open-prepared-statements: 20
       max-pool-prepared-statement-per-connection-size: 20
-      #ÅäÖÃ±O¿Ø½yÓ‹”r½ØµÄfilters£¬È¥µôºó±O¿Ø½çÃæsqlŸo·¨½yÓ‹£¬¡®wall¡¯ÓÃì¶·À»ğ‰¦
+      # é…ç½®ç›‘æ§ç»Ÿè®¡æ‹¦æˆªçš„filters, å»æ‰åç›‘æ§ç•Œé¢sqlæ— æ³•ç»Ÿè®¡, 'wall'ç”¨äºé˜²ç«å¢™
+      filters: stat,wall
+      # Springç›‘æ§AOPåˆ‡å…¥ç‚¹ï¼Œå¦‚x.y.z.service.*,é…ç½®å¤šä¸ªè‹±æ–‡é€—å·åˆ†éš”
+      aop-patterns: com.springboot.servie.*
+
+
+      # WebStatFilteré…ç½®
+      web-stat-filter:
+        enabled: true
+        # æ·»åŠ è¿‡æ»¤è§„åˆ™
+        url-pattern: /*
+        # å¿½ç•¥è¿‡æ»¤çš„æ ¼å¼
+        exclusions: '*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*'
+
+      # StatViewServleté…ç½®
+      stat-view-servlet:
+        enabled: true
+        # è®¿é—®è·¯å¾„ä¸º/druidæ—¶ï¼Œè·³è½¬åˆ°StatViewServlet
+        url-pattern: /druid/*
+        # æ˜¯å¦èƒ½å¤Ÿé‡ç½®æ•°æ®
+        reset-enable: false
+        # éœ€è¦è´¦å·å¯†ç æ‰èƒ½è®¿é—®æ§åˆ¶å°
+        login-username: admin
+        login-password: admin123456
+        # IPç™½åå•
+        # allow: 127.0.0.1
+        #ã€€IPé»‘åå•ï¼ˆå…±åŒå­˜åœ¨æ—¶ï¼Œdenyä¼˜å…ˆäºallowï¼‰
+        # deny: 192.168.1.218
+
+      # é…ç½®StatFilter
       filter:
         stat:
           log-slow-sql: true
-      #spring±O¿ØaopÇĞÈëüc£¬Èçx.y.z.service.*,ÅäÖÃ¶à‚€Ó¢ÎÄ¶ºÌ–·Ö¸î
-
-#      #webStaFilterÅäÖÃ
-#      web-stat-filter:
-#        enabled: true
-#        #Ìí¼Óß^VÒ„t
-#        url-pattern: /*
-#        #ºöÂÔß^VµÄ¸ñÊ½
-#        exclusions: '*.js,*.gif,*.jgp,*.png,*.css,*.ico,/druid/*'
-#          # StatViewServletÅäÖÃ
-#          stat-view-servlet:
-#           enabled: true
-#            # ·ÃÎÊÂ·¾¶Îª/druidÊ±£¬Ìø×ªµ½StatViewServlet
-#            url-pattern: /druid/*
-#            # ÊÇ·ñÄÜ¹»ÖØÖÃÊı¾İ
-#            reset-enable: false
-#            # ĞèÒªÕËºÅÃÜÂë²ÅÄÜ·ÃÎÊ¿ØÖÆÌ¨
-#            login-username: druid
-#            login-password: druid123
-#            # IP°×Ãûµ¥
-#            # allow: 127.0.0.1
-#            #¡¡IPºÚÃûµ¥£¨¹²Í¬´æÔÚÊ±£¬denyÓÅÏÈÓÚallow£©
-#            # deny: 192.168.1.218
-#
-#          # ÅäÖÃStatFilter
-#          filter:
-#            stat:
-#             log-slow-sql: true
+server:
+  servlet:
+    context-path: /web
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+logging:
+  level:
+    top.aftery.Mapper: debug

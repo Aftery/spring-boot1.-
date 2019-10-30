@@ -14,6 +14,7 @@ import java.util.List;
 
 @Slf4j
 @RestController
+@SuppressWarnings("all")
 public class UserController {
 
     @Autowired

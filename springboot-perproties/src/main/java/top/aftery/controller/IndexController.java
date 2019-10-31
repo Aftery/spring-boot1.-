@@ -13,16 +13,16 @@ public class IndexController {
     private BlogProperties blogProperties;
 
     @Autowired
-private configBean  configBean;
+    private configBean configBean;
 
     @RequestMapping("/")
-    public  String index(){
-        return blogProperties.getName()+"<---->"+blogProperties.getTitle();
+    public String index() {
+        return blogProperties.getName() + "<---->" + blogProperties.getTitle();
     }
 
 
     @RequestMapping("/blog")
-    public  String Blog(){
-        return  configBean.getName()+"<------>"+configBean.getTitle();
+    public String Blog() {
+        return configBean.getName() + "<------>" + configBean.getTitle();
     }
 }
